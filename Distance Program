@@ -1,0 +1,150 @@
+#include<iostream>
+#include<cstdlib>
+#include<queue>
+#include<list>
+#include<vector>
+#include<fstream>
+#include<iterator>
+#include<functional>
+using namespace std;
+
+const int INF = 2000000000;
+typedef pair<int,float> C;
+typedef vector<vector<C> > Graph;
+
+class compareMore
+{
+public:
+    bool operator()(C &p1, C&p2){
+            return p1.second> p2.second;
+    }
+};
+
+void dijkstra(const Graph  &G,const int &source,const int &destination,vector<int> &path)
+
+{
+    vector<float> d(G.size());
+
+    vector<int> parent(G.size());
+
+    for(unsigned int i = 0 ;i < G.size(); i++){
+
+        d[i] = INF;
+
+        parent[i] = -1;
+
+    }
+
+    priority_queue<C, vector<C>, compareMore > Q;
+    d[source] = 0;
+    Q.push (make_pair (source, d[source]));
+    while (!Q.empty()){
+        int u = Q.top().first;
+        if(u==destination) break;
+        Q.pop();
+    for(unsigned int i=0; i < G[u].size(); i++){
+        int v= G[u][i].first;
+        float w = G[u][i].second;
+        if(d[v] > d[u]+w){
+            d[v] = d[u]+w;
+            parent[v] = u;
+
+    Q.push(make_pair(v,d[v]));
+
+    }
+
+    }
+
+    }
+
+    path.clear();
+
+    int p = destination;
+
+    path.push_back(destination);
+
+    while(p!=source){
+
+        p = parent[p];
+
+        path.push_back(p);
+
+        }
+
+}
+
+
+int main()
+{
+    vector<vector< double> >pol;
+    string fileName;
+    int line,ok;
+    string yop;
+    cout << "Enter the file name : ";
+	cin >> fileName;
+	ifstream myfile;
+    myfile.open(fileName.c_str());
+    if (myfile.good())
+    {
+        myfile>>line;
+        cout << line << endl;
+  }
+    int V= line;
+    cout<< "Number of vertices is "<< V<<endl;
+    int n=0;
+    string files,mk;
+    double value;
+    for(int i=0; i<V; i++){
+         pol.push_back(vector<double>());
+     }
+    if (myfile) {
+        double value;
+        int i=0;
+    // read the elements in the file into a vector
+        while ( myfile >> value ) {
+            if(value>=0){
+                pol[i].push_back(value);}
+            cout<<value<< " ";
+            if(value==-1){
+                i++;
+            cout<<endl;}
+        }
+
+        cout<<endl;
+    }
+    cout<<endl<<endl;
+
+    for ( std::vector<std::vector<int>>::size_type i = 0; i < pol.size(); i++ )
+    {
+    for ( std::vector<int>::size_type j = 0; j < pol[i].size(); j++ )
+   {
+       cout<< pol[i][j]<< " ";
+   }
+    cout<< endl;
+}
+
+
+    Graph g;
+
+    g.resize(V);
+    for(int i=0; i<pol.size(); i++){ //vector<vector<double>>
+        for(int j=1;j<pol[i].size(); j+=2){ //vector<double>
+
+            g[pol[i][0]].push_back(make_pair(pol[i][j],pol[i][j+1]));
+
+
+    }
+    }
+
+    cout<<endl<<endl:
+    cout<< "Shortest path is ";
+    vector<int> path;
+
+    dijkstra(g,0,5,path);
+
+    for(int i=path.size()-1;i>=0;i--)
+
+        cout<<path[i]<<"->";
+
+    return 0;
+}
